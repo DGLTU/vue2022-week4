@@ -14,8 +14,8 @@ export default{
                 v-for="(page,index) in pagination.total_pages" 
                 :key="index" @click.prevent="$emit('turn-page',page)">
                 <a class="page-link" href="#">{{page}}</a></li>
-            <li class="page-item" :
-                class="{'disabled':!  pagination.has_next}" 
+            <li class="page-item" 
+                :class="{'disabled':!  pagination.has_next}" 
                 @click.prevent="$emit('turn-page',pagination.current_page+1)">
                 <a class="page-link" href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
