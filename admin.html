@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>產品頁面</title>
+</head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+    crossorigin="anonymous"></script>
+<link rel="stylesheet" href="admin.css">
+
+<body>
+    <div id="app">
+        <div class="content">
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-primary" @click="openModal('add')">建立新的商品</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>產品名稱</th>
+                        <th>原價</th>
+                        <th>售價</th>
+                        <th>是否啟用</th>
+                        <th>查看細節</th>
+                        <th>編輯</th>
+                        <th>刪除</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template v-for="item in product" :key="item.id" class="row">
+                        <tr>
+                            <td class="col-3">{{item.title}}</td>
+                            <td>{{item.origin_price}}</td>
+                            <td>{{item.price}}</td>
+                            <td v-if="item.is_enabled" class="text-success">啟用</td>
+                            <td v-else>未啟用</td>
+                            <td>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#detailProduct" @click="openModal('detail',item)">查看細節</button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-outline-success"
+                                    @click="openModal('edit',item)">編輯</button>
+                            </td>
+                            <td>
+                                <button type="button" :id="item.id" class="btn btn-outline-danger"
+                                    @click="openModal('delete',item)">刪除</button>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+            <p>目前有 {{product.length}} 項產品</p>
+            <!-- pagination -->
+            <pagination :pagination="pagination" @turn-page="getProduct"></pagination>
+            <!-- 詳細資料 -->
+            <div class="modal fade" id="detailProduct" aria-labelledby="detailLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addProductLabel">商品詳細資料</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="productDetail-card">
+                            <img :src="temp.imageUrl" alt="">
+                            <p>商品名稱 : {{temp.title}} <small>{{temp.category}}</small></p>
+                            <p>商品描述 : {{temp.description}}</p>
+                            <p>商品內容 : {{temp.content}}</p>
+                            <p>售價 : <del class="del">{{temp.origin_price}}</del> <span>{{temp.price}}</span> /
+                                {{temp.unit}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 產品頁面 -->
+            <div class="modal fade" id="productModal" aria-labelledby="productLabel" aria-hidden="true">
+                <product-component :temp="temp" :state="state" @update-product="updateProduct"></product-component>
+            </div>
+            <!-- 刪除頁面 -->
+            <div class="modal fade" id="delProduct" tabindex="-1" aria-labelledby="delProductLabel" aria-hidden="true">
+                <del-component :temp=temp @del-product="delProduct"></del-component>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script type="module" src="./admin.js"></script>
+</body>
+
+</html>
