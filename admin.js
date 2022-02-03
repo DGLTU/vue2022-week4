@@ -73,7 +73,6 @@ const app = {
                 })
         },
         updateProduct(state) {
-            if (this.checkFormVale(this.temp)) return
             let http = 'post'
             let url = `${this.baseUrl}/${this.apiPath}/admin/product/`
             let msg = '新增商品成功 !'
